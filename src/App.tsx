@@ -45,4 +45,28 @@ export default function App() {
             <div className={`player-hands count-${Math.max(1, game.playerHands.length)}`}>
               {game.playerHands.map((hand, handIndex) => <div className={`player-hand ${playing && game.activeHandIndex === handIndex ? 'active' : ''}`} key={`hand-${handIndex}`}>
                 <div className="cards-row player-cards">{hand.map((card, i) => <Card key={`player-${handIndex}-${i}`} card={card} delay={i * 100} />)}</div>
-                <div className="hand-heading player-heading"><div><span className="eyebrow">{game.playerHands.length > 1 ? `HAND ${handIndex + 1} · ${money(game.wagers[handIndex])}` : 'PLAYER'}</span>{game.playerHands.length === 
+                <div className="hand-heading player-heading"><div><span className="eyebrow">{game.playerHands.length > 1 ? `HAND ${handIndex + 1} · ${money(game.wagers[handIndex])}` : 'PLAYER'}</span>{game.playerHands.length === 1 && <h2>You</h2>}</div><div className="score-pill"><span>SCORE</span><b>{scoreHand(hand)}{game.surrenderedHands[handIndex] ? ' · SURRENDER' : ''}</b></div></div>
+              </div>)}
+              {!game.playerHands.length && <div className="cards-row player-cards"><div className="empty-hand">Your hand awaits</div></div>}
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section className="control-dock" aria-label="게임 조작">
+      <div className="dock-info"><span className="eyebrow">CURRENT WAGER</span><strong>{money(playing || over ? game.wagers.reduce((sum, wager) => sum + wager, 0) : bet)}</strong><span className="dock-note">Minimum bet · 10 chips</span></div>
+      <div className="dock-actions">
+        {game.phase === 'betting' && <>
+          <div className="bet-control"><label htmlFor="bet">BET</label><button aria-label="베팅 줄이기" onClick={() => setBet(Math.max(10, bet - 10))} disabled={bet <= 10}>−</button><input id="bet" type="number" min="10" step="10" max={game.bankroll} value={bet} onChange={(e) => setBet(Math.max(10, Number(e.target.value) || 10))} /><button aria-label="베팅 늘리기" onClick={() => setBet(Math.min(game.bankroll, bet + 10))} disabled={bet + 10 > game.bankroll}>+</button></div>
+          <button className="button primary" onClick={deal} disabled={game.bankroll < 10}>Deal cards <span>↗</span></button>
+        </>}
+        {game.phase === 'insuranceDecision' && <><span className="insurance-offer">Dealer shows an Ace · Insure for {money(game.bet / 2)}?</span><button className="button secondary" onClick={skipInsurance}>No insurance</button><button className="button primary" onClick={insure} disabled={game.bet % 2 !== 0 || game.bankroll < game.bet / 2}>Take insurance</button></>}
+        {playing && <>{canSurrender && <button className="button secondary" onClick={giveUp}>Surrender</button>}{canSplit && <button className="button secondary" onClick={splitHand}>Split</button>}{canDouble && <button className="button secondary" onClick={double}>Double</button>}<button className="button secondary" onClick={hold}>Stand <span>Ⅱ</span></button><button className="button primary" onClick={takeCard}>Hit <span>＋</span></button></>}
+        {over && <button className="button primary" onClick={newRound}>Play another hand <span>↗</span></button>}
+      </div>
+    </section>
+    <footer className="footer"><span>PLAY AT YOUR OWN PACE</span><span>♠ &nbsp; GOOD LUCK AT THE TABLE &nbsp; ♠</span><span>CLASSIC RULES · 3:2 PAYOUT</span></footer>
+    {error && <div className="toast" role="alert">{error}</div>}
+  </main>;
+}
