@@ -1,0 +1,48 @@
+import { Card } from './components/Card';
+import { useBlackjack } from './hooks/useBlackjack';
+import { scoreHand } from './game/score';
+
+const money = (value: number) => `${value.toLocaleString('ko-KR')} chips`;
+
+export default function App() {
+  const { game, bet, setBet, error, deal, takeCard, hold, double, splitHand, giveUp, insure, skipInsurance, newRound } = useBlackjack();
+  const playing = game.phase === 'playerTurn';
+  const over = game.phase === 'roundOver';
+  const dealerHidden = (playing || game.phase === 'insuranceDecision') && !over;
+  const dealerScore = dealerHidden ? scoreHand(game.dealerHand.slice(0, 1)) : scoreHand(game.dealerHand);
+  const playerHand = game.playerHands[game.activeHandIndex] ?? game.playerHands[0] ?? [];
+  const canDouble = playing && playerHand.length === 2 && !game.doubledHands[game.activeHandIndex] && game.bankroll >= game.wagers[game.activeHandIndex];
+  const canSplit = playing && game.playerHands.length === 1 && playerHand.length === 2 && playerHand[0].rank === playerHand[1].rank && game.bankroll >= game.wagers[0];
+  const canSurrender = playing && game.playerHands.length === 1 && playerHand.length === 2;
+
+  return <main className="app-shell">
+    <header className="topbar">
+      <a className="brand" href="#top" aria-label="Midnight Table home"><span className="brand-mark">♠</span><span>MIDNIGHT<span className="brand-light"> TABLE</span></span></a>
+      <div className="table-meta"><span className="live-dot" /> PRIVATE TABLE <span className="meta-divider">/</span> CLASSIC BLACKJACK</div>
+      <div className="wallet"><span className="wallet-label">YOUR BALANCE</span><strong>{money(game.bankroll)}</strong></div>
+    </header>
+
+    <section className="table-wrap" id="top">
+      <div className={`table-felt ${playing ? 'is-live' : ''}`}>
+        <div className="felt-grain" />
+        <div className="table-edge" />
+        <div className="table-content">
+          <div className="round-indicator"><span>ROUND</span><b>{game.bet ? 'IN PLAY' : 'READY'}</b></div>
+          <section className="hand-area dealer-area" aria-label="딜러 카드">
+            <div className="hand-heading"><div><span className="eyebrow">HOUSE</span><h2>Dealer</h2></div><div className="score-pill"><span>SCORE</span><b>{game.dealerHand.length ? dealerHidden ? `${dealerScore} + ?` : dealerScore : '—'}</b></div></div>
+            <div className="cards-row dealer-cards">
+              {game.dealerHand.map((card, i) => <Card key={`dealer-${i}`} card={card} hidden={dealerHidden && i === 1} delay={i * 100} />)}
+              {!game.dealerHand.length && <div className="empty-hand">Awaiting deal</div>}
+            </div>
+          </section>
+
+          <div className="table-center">
+            <span className="center-rule">BLACKJACK PAYS 3 TO 2 <i>✦</i> DEALER STANDS ON 17</span>
+            {game.message ? <div aria-live="polite" className={`result-banner ${game.result === 'playerWin' || game.result === 'blackjack' ? 'win' : game.result === 'push' ? 'push' : 'loss'}`}><span>{game.result === 'blackjack' ? '✦ NATURAL BLACKJACK' : game.result === 'push' ? 'EVENLY MATCHED' : game.result === 'playerWin' ? 'WELL PLAYED' : 'HOUSE TAKES THIS ROUND'}</span><strong>{game.message}</strong></div> : <div className="table-emblem"><span>♠</span><small>EST. 21</small></div>}
+          </div>
+
+          <section className="hand-area player-area" aria-label="플레이어 카드">
+            <div className={`player-hands count-${Math.max(1, game.playerHands.length)}`}>
+              {game.playerHands.map((hand, handIndex) => <div className={`player-hand ${playing && game.activeHandIndex === handIndex ? 'active' : ''}`} key={`hand-${handIndex}`}>
+                <div className="cards-row player-cards">{hand.map((card, i) => <Card key={`player-${handIndex}-${i}`} card={card} delay={i * 100} />)}</div>
+                <div className="hand-heading player-heading"><div><span className="eyebrow">{game.playerHands.length > 1 ? `HAND ${handIndex + 1} · ${money(game.wagers[handIndex])}` : 'PLAYER'}</span>{game.playerHands.length === 
