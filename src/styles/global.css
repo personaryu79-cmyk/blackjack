@@ -19,3 +19,15 @@
 @keyframes result-enter{from{opacity:0;transform:translateY(8px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes toast-enter{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}
 @media(max-width:600px){.player-hands{gap:4px;width:100%}.player-hand{min-width:0;flex:1;padding:5px 3px}.player-hand .playing-card{width:clamp(44px,15vw,62px);height:clamp(68px,22vw,90px)}.player-hand .cards-row{gap:4px;min-height:92px}.player-hand .card-corner{font-size:12px}.player-hand .card-corner i{font-size:9px}.player-hand .card-center{font-size:23px}.player-hand .hand-heading{gap:4px}.player-hand .score-pill{gap:5px;padding:6px}.insurance-offer{width:100%;text-align:center}}
+body{min-height:100vh;min-height:100dvh}
+.app-shell{min-height:100vh;min-height:100dvh;padding:env(safe-area-inset-top) 5.2vw env(safe-area-inset-bottom)}
+@media(max-width:760px){.app-shell{padding:env(safe-area-inset-top) 20px env(safe-area-inset-bottom)}}
+.toast{bottom:calc(24px + env(safe-area-inset-bottom))}
+.install-help{position:relative}
+.install-help summary{cursor:pointer;list-style:none;color:#948763;font:8px 'DM Mono',monospace;letter-spacing:1px}
+.install-help summary::-webkit-details-marker{display:none}
+.install-help summary:focus-visible{outline:2px solid #e8ce91;outline-offset:3px}
+.install-popover{position:absolute;z-index:10;bottom:28px;left:0;width:min(300px,calc(100vw - 40px));padding:16px 18px;background:#09261f;border:1px solid #d5bd7d60;box-shadow:0 12px 34px #0009;color:#eee9dd;font-size:12px;line-height:1.6}
+.install-popover strong{font:14px 'Playfair Display',serif;color:#e2d099}
+.install-popover p{margin:8px 0 0}
+@media(max-width:760px){.install-popover{left:auto;right:0}}

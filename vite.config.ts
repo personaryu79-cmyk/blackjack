@@ -9,7 +9,7 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['pwa-icon.svg'],
+      includeAssets: ['pwa-icon.svg', 'apple-touch-icon.png'],
       manifest: {
         id: './',
         name: 'Midnight Table Blackjack',
@@ -24,6 +24,7 @@ export default defineConfig({
         theme_color: '#071b16',
         icons: [
           { src: 'pwa-icon.svg', sizes: 'any', type: 'image/svg+xml', purpose: 'any maskable' },
+          { src: 'apple-touch-icon.png', sizes: '180x180', type: 'image/png', purpose: 'any' },
         ],
       },
       workbox: {

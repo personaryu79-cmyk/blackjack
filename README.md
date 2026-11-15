@@ -60,4 +60,12 @@ The game engine does not depend on React. `startRound` accepts an ordered deck f
 
 The production build generates a web app manifest and service worker with `vite-plugin-pwa`. The app shell and static build assets are precached. Google Fonts are cached at runtime when available; system font fallbacks keep the interface usable offline. The service worker updates automatically when a new production version is available.
 
+### Install on iPhone
+
+1. Open the live site in Safari: <https://personaryu79-cmyk.github.io/blackjack/>.
+2. Tap **Share**, then **Add to Home Screen**.
+3. Turn on **Open as Web App**, then tap **Add**. Launch the game from its new Home Screen icon for the standalone app view.
+
+The page includes an iPhone Home Screen icon, standalone web app metadata, and safe-area spacing for the status bar and home indicator. These are the iOS-specific settings Apple documents for Home Screen web apps. See [Apple's iPhone instructions](https://support.apple.com/guide/iphone/iphea86e5236/ios) and [Safari web app configuration](https://developer.apple.com/library/archive/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html).
+
 The GitHub Actions workflow in `.github/workflows/deploy.yml` runs tests and deploys `dist/` to GitHub Pages on pushes to `main`. Vite uses relative asset paths so the app also works at a repository subpath URL. Once Pages deployment finishes, GitHub shows the live URL in the `github-pages` environment and in the deployment workflow summary.

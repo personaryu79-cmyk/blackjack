@@ -66,7 +66,7 @@ export default function App() {
         {over && <button className="button primary" onClick={newRound}>Play another hand <span>↗</span></button>}
       </div>
     </section>
-    <footer className="footer"><span>PLAY AT YOUR OWN PACE</span><span>♠ &nbsp; GOOD LUCK AT THE TABLE &nbsp; ♠</span><span>CLASSIC RULES · 3:2 PAYOUT</span></footer>
+    <footer className="footer"><details className="install-help"><summary>iPhone 홈 화면에 추가</summary><div className="install-popover"><strong>앱처럼 실행하기</strong><p>Safari에서 공유 버튼을 누르고 <b>홈 화면에 추가</b>를 선택하세요. <b>웹 앱으로 열기</b>를 켜고 추가하면 전체 화면으로 실행됩니다.</p></div></details><span>♠ &nbsp; GOOD LUCK AT THE TABLE &nbsp; ♠</span><span>CLASSIC RULES · 3:2 PAYOUT</span></footer>
     {error && <div className="toast" role="alert">{error}</div>}
   </main>;
 }
